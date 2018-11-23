@@ -27,7 +27,8 @@ public class ActionWindow extends AbstractAction {
         }
 
         // login
-        try {
+        try
+        {
             if (userDao.signinByLogin(textLogin, textPassword))
             {
                 window.getLabel().setText("Ok go next");

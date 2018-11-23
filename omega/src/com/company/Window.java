@@ -2,6 +2,8 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class Window extends JFrame {
@@ -38,13 +40,20 @@ public class Window extends JFrame {
         panel.add(textLogin);
         panel.add(textPassword);
 
-        label = new JLabel("Rien pour le moment");
-
+        label = new JLabel("");
         panel.add(label);
 
-        JButton bouton = new JButton(new ActionWindow(this, "Sign In"));
+        String[] country_options = { "France", "USA", "England" };
+        JComboBox country = new JComboBox(country_options);
 
-        panel.add(bouton);
+        JButton signin = new JButton(new ActionWindow(this, "Sign In"));
+        JButton signup = new JButton("Sign Up");
+
+        signup.addActionListener(e -> removeAll());
+
+        panel.add(country);
+        panel.add(signin);
+        panel.add(signup);
 
         return panel;
     }
