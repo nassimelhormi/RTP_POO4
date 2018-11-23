@@ -1,23 +1,45 @@
 package com.company;
 
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import javax.swing.AbstractAction;
+import java.util.List;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Objects;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class ActionWindow extends AbstractAction {
 
     private Window window;
+    private JPanel panel;
 
-    public ActionWindow(Window window, String texte)
+    public ActionWindow(Window window, JPanel panel, String texte)
     {
         super(texte);
 
         this.window = window;
+        this.panel = panel;
+    }
+
+    private void ClearWindow(JPanel panel)
+    {
+        panel.removeAll();
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void actionPerformed(ActionEvent e)
     {
         UserDao userDao = new UserDaoImpl();
+        Csv csvFile = new Csv();
         String textLogin = window.getTextLogin().getText();
         String textPassword = window.getTextPassword().getText();
 
@@ -31,13 +53,18 @@ public class ActionWindow extends AbstractAction {
         {
             if (userDao.signinByLogin(textLogin, textPassword))
             {
-                window.getLabel().setText("Ok go next");
+                this.ClearWindow(this.panel); // clear panel
+                if (userDao.getCountry(textLogin).equals("FRANCE"))
+                {
+                    csvFile.ReadAllFile(panel);
+                }
+
             }
             else
             {
                 window.getLabel().setText("Wrong login or password");
             }
-        } catch (SQLException e1) {
+        } catch (SQLException | IOException e1) {
             e1.printStackTrace();
         }
     }

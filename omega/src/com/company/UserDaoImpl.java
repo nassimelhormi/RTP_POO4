@@ -4,8 +4,6 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
@@ -92,6 +90,31 @@ public class UserDaoImpl implements UserDao {
         prepare.setString   (3, user.getPassword());
         prepare.setInt   (4, user.getIdCountry());
         prepare.execute();
+    }
+
+    @Override
+    public String getCountry(String login) throws SQLException
+    {
+        String country = null;
+        ResultSet result = null;
+        try {
+            result = this .connect
+                    .createStatement(
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_UPDATABLE
+                    ).executeQuery(
+                            String.format("SELECT country FROM users WHERE login = '%s'", login)
+                    );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (result.next())
+        {
+            country = result.getString("country");
+        }
+
+        return country;
     }
 
     @Override

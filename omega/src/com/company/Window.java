@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
+
 public class Window extends JFrame {
 
     private JTextField textLogin;
@@ -20,7 +21,7 @@ public class Window extends JFrame {
 
     private void build(){
         setTitle("Omega by big_ls"); //On donne un titre à l'application
-        setSize(400,400); //On donne une taille à notre fenêtre
+        setSize(700,700); //On donne une taille à notre fenêtre
         setLocationRelativeTo(null); //On centre la fenêtre sur l'écran
         setResizable(true); //On permet le redimensionnement
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //On dit à l'application de se fermer lors du clic sur la croix
@@ -43,15 +44,22 @@ public class Window extends JFrame {
         label = new JLabel("");
         panel.add(label);
 
-        String[] country_options = { "France", "USA", "England" };
-        JComboBox country = new JComboBox(country_options);
 
-        JButton signin = new JButton(new ActionWindow(this, "Sign In"));
+        JButton signin = new JButton(new ActionWindow(this, panel,"Sign In"));
         JButton signup = new JButton("Sign Up");
 
-        signup.addActionListener(e -> removeAll());
+        signup.addActionListener( new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println("Do Something Clicked");
+                panel.removeAll();
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
 
-        panel.add(country);
         panel.add(signin);
         panel.add(signup);
 
