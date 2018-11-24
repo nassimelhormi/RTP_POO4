@@ -57,6 +57,17 @@ public class ActionWindow extends AbstractAction {
                 if (userDao.getCountry(textLogin).equals("FRANCE"))
                 {
                     csvFile.ReadAllFile(panel);
+
+                    if (userDao.getRole(textLogin).equals("CADRE"))
+                    {
+                        JTable table = csvFile.GetTable();
+                        JLabel totalWeight = new JLabel("Poids total : " + csvFile.GetTotalWeight(table));
+                        JLabel totalCut = new JLabel("Taille total : " + csvFile.GetTotalCut(table));
+                        JLabel imcTotal = new JLabel("IMC : " + csvFile.CalculTotalImc(csvFile.GetTotalWeight(table), csvFile.GetTotalCut(table)));
+                        panel.add(totalWeight);
+                        panel.add(totalCut);
+                        panel.add(imcTotal);
+                    }
                 }
 
             }

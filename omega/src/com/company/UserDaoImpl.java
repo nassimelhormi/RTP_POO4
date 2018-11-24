@@ -118,6 +118,31 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public String getRole(String login) throws SQLException
+    {
+        String country = null;
+        ResultSet result = null;
+        try {
+            result = this .connect
+                    .createStatement(
+                            ResultSet.TYPE_SCROLL_INSENSITIVE,
+                            ResultSet.CONCUR_UPDATABLE
+                    ).executeQuery(
+                            String.format("SELECT role FROM users WHERE login = '%s'", login)
+                    );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (result.next())
+        {
+            country = result.getString("role");
+        }
+
+        return country;
+    }
+
+    @Override
     public boolean signinByLogin(String login, String password) throws SQLException
     {
         ResultSet result = this .connect
