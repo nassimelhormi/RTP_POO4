@@ -23,9 +23,9 @@ public class UserDaoImpl implements UserDao {
         {
             User user = new User(
                     result.getString("login"),
-                    result.getString("email"),
                     result.getString("password"),
-                    result.getInt("id_country")
+                    result.getString("country"),
+                    result.getString("role")
             );
             users.add(user);
         }
@@ -48,47 +48,45 @@ public class UserDaoImpl implements UserDao {
         {
             user = new User(
                     result.getString("login"),
-                    result.getString("email"),
                     result.getString("password"),
-                    result.getInt("id_country")
+                    result.getString("country"),
+                    result.getString("role")
             );
         }
         return user;
     }
 
     @Override
-    public User getUserByLogin(String login) throws SQLException {
+    public boolean getUserByLogin(String login) throws SQLException {
 
         ResultSet result = this .connect
                 .createStatement(
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_UPDATABLE
                 ).executeQuery(
-                        "SELECT * FROM users WHERE login = " + login
+                        String.format("SELECT * FROM users WHERE login = '%s'", login)
                 );
 
-        User user = null;
+        boolean res = false;
         if(result.next())
         {
-            user = new User(
-                    result.getString("login"),
-                    result.getString("email"),
-                    result.getString("password"),
-                    result.getInt("id_country")
-            );
+            res = true;
         }
-        return user;
+        return res;
     }
 
     @Override
     public void createUser(User user) throws SQLException
     {
         PreparedStatement prepare = this.connect.
-                prepareStatement("INSERT INTO users (login, email, password, id_country) VALUES (?, ?, ?, ?)");
+                prepareStatement("INSERT INTO users (login, password, country, role) VALUES (?, ?, ?, ?)");
         prepare.setString (1, user.getLogin());
-        prepare.setString (2, user.getEmail());
-        prepare.setString   (3, user.getPassword());
-        prepare.setInt   (4, user.getIdCountry());
+        prepare.setString   (2, user.getPassword());
+        prepare.setString   (3, user.getCountry());
+        prepare.setString   (4, user.getRole());
+
+        System.out.println(user.getLogin());
+        System.out.println(user.getRole());
         prepare.execute();
     }
 

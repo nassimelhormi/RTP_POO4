@@ -7,21 +7,19 @@ public class User {
     private String  password;
     private int     id;
     private int     id_country;
+    public String   country;
+    public String   role;
 
     // Constructeur
-    User(String login, String email, String password, int id_country)
+    User(String login, String password, String country, String role)
     {
-        this.email = email;
         this.login = login;
         this.password = password;
-        this.id_country = id_country;
+        this.country = country;
+        this.role = role;
     }
 
     // Getter
-    public String getEmail()
-    {
-        return email;
-    }
 
     public String getLogin()
     {
@@ -31,6 +29,16 @@ public class User {
     public String getPassword()
     {
         return password;
+    }
+
+    public String getCountry()
+    {
+        return country;
+    }
+
+    public String getRole()
+    {
+        return role;
     }
 
     public int getId()
@@ -45,10 +53,6 @@ public class User {
 
 
     // Setter
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
 
     public void setLogin(String login)
     {
@@ -57,7 +61,17 @@ public class User {
 
     public void setPassword(String password)
     {
-        this.login = password;
+        this.password = password;
+    }
+
+    public void setCountry(String country)
+    {
+        this.country = country;
+    }
+
+    public void setRole(String role)
+    {
+        this.role = role;
     }
 
     public void setId(int id)

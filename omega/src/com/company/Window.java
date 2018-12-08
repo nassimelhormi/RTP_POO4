@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.KeyListener;
+import java.sql.SQLException;
 
 
 public class Window extends JFrame {
@@ -12,6 +13,8 @@ public class Window extends JFrame {
     private JTextField textLogin;
     private JPasswordField textPassword;
     private JLabel label;
+    private JComboBox<String> country;
+    private JComboBox<String> role;
 
     public Window(){
         super();
@@ -30,6 +33,7 @@ public class Window extends JFrame {
 
     private JPanel buildContentPane(){
         JPanel panel = new JPanel();
+        UserDao userDao = new UserDaoImpl();
         panel.setLayout(new FlowLayout());
 
         textLogin = new JTextField();
@@ -38,12 +42,23 @@ public class Window extends JFrame {
         textPassword = new JPasswordField();
         textPassword.setColumns(10);
 
+        country = new JComboBox<>();
+        country.addItem("FRANCE");
+        country.addItem("ENGLAND");
+        country.addItem("USA");
+
+        role = new JComboBox<>();
+        role.addItem("CADRE");
+        role.addItem("MEDECIN");
+
         panel.add(textLogin);
         panel.add(textPassword);
+        panel.add(country);
+        panel.add(role);
 
         label = new JLabel("");
-        panel.add(label);
 
+        panel.add(label);
 
         JButton signin = new JButton(new ActionWindow(this, panel,"Sign In"));
         JButton signup = new JButton("Sign Up");
@@ -53,10 +68,25 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                System.out.println("Do Something Clicked");
-                panel.removeAll();
-                panel.revalidate();
-                panel.repaint();
+                try {
+                    System.out.println(textLogin.getText());
+                    if (userDao.getUserByLogin(String.valueOf(textLogin.getText())))
+                    {
+                        label.setText("This user already exist");
+                        System.out.println("User exist");
+                        panel.add(label);
+                    }
+                    else
+                    {
+                        User user = new User(textLogin.getText(), textPassword.getText(), country.getSelectedItem().toString(), role.getSelectedItem().toString());
+                        userDao.createUser(user);
+                        label.setText("Registered");
+                    }
+
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+
             }
         });
 
@@ -78,3 +108,4 @@ public class Window extends JFrame {
         return label;
     }
 }
+
